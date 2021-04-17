@@ -1,0 +1,6 @@
+module Pods_selfsensoredrn {
+  umbrella header "Pods-selfsensoredrn-umbrella.h"
+
+  export *
+  module * { export * }
+}
