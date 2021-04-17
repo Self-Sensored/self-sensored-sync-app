@@ -11,7 +11,6 @@ export interface IAppleHealthPermissionsProps {
 const HealthPermissions: React.FC<IAppleHealthPermissionsProps> = ({
     setPermissionsGranted,
 }) => {
-    console.log(setPermissionsGranted);
     const [message, setMessage] = useState("Getting permissions");
 
     const permissions = {
@@ -23,17 +22,13 @@ const HealthPermissions: React.FC<IAppleHealthPermissionsProps> = ({
 
     AppleHealthKit.initHealthKit(permissions, (error: string) => {
         if (error) {
-            setMessage("Failed to obtain needed permissions.");
+            setMessage("Failed to obtain permissions.");
             return;
         }
         setPermissionsGranted(true);
     });
 
-    return (
-        <>
-            <Text>{message}</Text>
-        </>
-    );
+    return <Text>{message}</Text>;
 };
 
 export default HealthPermissions;
