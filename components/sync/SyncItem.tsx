@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text } from "react-native";
-
-import SyncStatusText from "./SyncStatusText";
-import { SyncStatusTextProps } from "./SyncStatusText";
 
 import AppleHealthKit, {
     HealthKitPermissions,
     HealthUnitOptions,
     HealthValue,
 } from "react-native-health";
+
+import SyncStatusText from "./SyncStatusText";
+import { SyncStatusTextProps } from "./SyncStatusText";
+import { getData, IQuery } from "./Query";
 
 // Date Health app was released.
 const HEALTH_APP_RELEASE_DATE = new Date(2014, 6, 2);
@@ -21,33 +22,25 @@ export interface SyncItemProps {
 const SyncItem: React.FC<SyncItemProps> = (props: SyncItemProps) => {
     const today = new Date();
 
-    const options = {
-        unit: props.datatype,
-        startDate: HEALTH_APP_RELEASE_DATE.toISOString(),
-        endDate: today.toISOString(),
-    } as HealthUnitOptions;
-
-    AppleHealthKit.getWeightSamples(
-        options,
-        (callbackError: string, results: HealthValue[]) => {
-            if (callbackError) {
-                console.log(JSON.stringify(callbackError, null, 2));
-            }
-            console.log(JSON.stringify(results, null, 2));
-        }
-    );
-
-    const status = {
-        datatype: AppleHealthKit.Constants.Permissions.StepCount,
-        startDate: HEALTH_APP_RELEASE_DATE,
-        endDate: today,
-    } as SyncStatusTextProps;
+    useEffect(() => {
+        const runQuery = async () => {
+            try {
+                const result = await getData(
+                    props.datatype,
+                    HEALTH_APP_RELEASE_DATE,
+                    today
+                );
+                console.log(JSON.stringify(result, null, 2));
+            } catch (error) {}
+        };
+        runQuery();
+    }, []);
 
     return (
         <SyncStatusText
-            datatype={status.datatype}
-            startDate={status.startDate}
-            endDate={status.endDate}
+            datatype={props.datatype}
+            startDate={HEALTH_APP_RELEASE_DATE}
+            endDate={today}
         ></SyncStatusText>
     );
 };

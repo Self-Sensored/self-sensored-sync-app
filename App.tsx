@@ -5,7 +5,7 @@ import { HealthPermission } from "react-native-health";
 import AppleHealthPermissions, {
     IAppleHealthPermissionsProps,
 } from "./components/apple/AppleHealthPermissions";
-import SyncItem from "./components/sync/SyncItem";
+import SyncAllItems from "./components/sync/SyncAllItems";
 
 export default function App() {
     const [permissionsGranted, setPermissionsGranted] = useState(false);
@@ -14,7 +14,7 @@ export default function App() {
         <View style={styles.container}>
             <StatusBar style="auto" />
             {permissionsGranted ? (
-                <SyncItem />
+                <SyncAllItems />
             ) : (
                 <AppleHealthPermissions
                     setPermissionsGranted={setPermissionsGranted}
