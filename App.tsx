@@ -6,6 +6,7 @@ import AppleHealthPermissions, {
     IAppleHealthPermissionsProps,
 } from "./components/apple/AppleHealthPermissions";
 import SyncAllItems from "./components/sync/SyncAllItems";
+import SelfSensored from "./components/self-sensored/SelfSensored";
 
 export default function App() {
     const [permissionsGranted, setPermissionsGranted] = useState(false);
@@ -14,7 +15,7 @@ export default function App() {
         <View style={styles.container}>
             <StatusBar style="auto" />
             {permissionsGranted ? (
-                <SyncAllItems />
+                <SelfSensored />
             ) : (
                 <AppleHealthPermissions
                     setPermissionsGranted={setPermissionsGranted}
