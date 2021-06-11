@@ -1,23 +1,44 @@
 import axios from "axios";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { refreshToken, SelfSensoredAPI } from "../apis/SelfSensored";
+import IContextDetail from "../interfaces/IContextDetailType";
 
 export interface SelfSensoredProps {}
 
 const SelfSensored: React.FC<SelfSensoredProps> = () => {
+    const [contextDetails, setContextDetails] = useState<IContextDetail[]>();
     const getContextDetails = async () => {
         try {
-            let results = await SelfSensoredAPI.getContextDetails();
-            console.log(JSON.stringify(results, null, 2));
+            let details = await SelfSensoredAPI.getContextDetails();
+            console.log(JSON.stringify(details, null, 2));
+            setContextDetails(details);
         } catch (error) {}
     };
 
-    getContextDetails();
+    if (contextDetails === undefined) {
+        getContextDetails();
+    }
+
+    useEffect(() => {}, [contextDetails]);
+
+    const renderItems = (item: any) => <></>;
 
     return (
         <>
-            <Text style={styles.text}>SelfSensored</Text>
+            {contextDetails ? (
+                <FlatList
+                    data={contextDetails}
+                    renderItem={({ item }) => (
+                        <View>
+                            <Text style={styles.text}>{item.action}</Text>
+                        </View>
+                    )}
+                    keyExtractor={(item) => `${item.id}`}
+                />
+            ) : (
+                <Text style={styles.text}>SelfSensored</Text>
+            )}
         </>
     );
 };
@@ -28,6 +49,14 @@ const styles = StyleSheet.create({
         color: "#FFF",
     },
     textDate: {
+        fontSize: 10,
+        color: "#FFF",
+    },
+    title: {
+        fontSize: 24,
+        color: "#FFF",
+    },
+    item: {
         fontSize: 10,
         color: "#FFF",
     },
