@@ -1,25 +1,23 @@
 import React, { createContext, useState } from "react";
 import getSampleTypes from "../apple/AllHealthKitSampleTypes";
-import BuildObeservationContext from "../self-sensored/BuildObservationContext";
 import SyncItem, { SyncItemProps } from "./SyncItem";
+import Devices from "../self-sensored/Devices";
 
 export interface SyncAllItemsProps {}
 
 const SyncAllItems: React.FC<SyncAllItemsProps> = () => {
+    const devices = new Devices();
+
     const allSampleTypes = getSampleTypes();
-    const [selectedDatatype, setSelectedDatatype] = useState(allSampleTypes[0]);
-
-    const createContext = async () => {
-        const obvy_context = new BuildObeservationContext();
-        obvy_context.init();
-        return;
-    };
-
-    createContext();
+    const [selectedDatatype, setSelectedDatatype] = useState(allSampleTypes[4]);
 
     return (
         <>
-            <SyncItem datatype={selectedDatatype} unit="pound"></SyncItem>
+            <SyncItem
+                datatype={selectedDatatype}
+                devices={devices}
+                unit="pound"
+            ></SyncItem>
         </>
     );
 };

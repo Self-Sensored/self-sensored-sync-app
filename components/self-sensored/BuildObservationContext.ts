@@ -15,6 +15,7 @@ import ISelfSensoredDevice from './ISelfSensoredDevice';
 
 export default class BuildObeservationContext {
 
+    selectedDatatype: string | undefined;
     device: ISelfSensoredDevice | undefined = undefined;
 
     // 1. Login user.
@@ -22,26 +23,33 @@ export default class BuildObeservationContext {
     // 3. Get ContextDetails
     // 4.
 
-    constructor() {}
+    constructor(selectedDatatype: string) {
+        this.selectedDatatype = selectedDatatype;
+    }
 
     init = async () => {
 
-        if (this.device === undefined) {
-            try {
-                this.device = < ISelfSensoredDevice > {
-                    native_id: await getUniqueId(),
-                    platform: await Platform.OS,
-                    name: await getDeviceName(),
-                    os: await getBaseOs(),
-                    os_version: await Platform.Version,
-                    serial_number: await getSerialNumber(),
-                    mac_address: await getMacAddress()
-                };
-                console.log(JSON.stringify(this.device, null, 2));
-            } catch (err) {
-                console.log(err);
-            }
+        if(this.selectedDatatype !== undefined) {
+            
         }
+
+
+        // if (this.device === undefined) {
+        //     try {
+        //         this.device = < ISelfSensoredDevice > {
+        //             native_id: await getUniqueId(),
+        //             platform: await Platform.OS,
+        //             name: await getDeviceName(),
+        //             os: await getBaseOs(),
+        //             os_version: await Platform.Version,
+        //             serial_number: await getSerialNumber(),
+        //             mac_address: await getMacAddress()
+        //         };
+        //         console.log(JSON.stringify(this.device, null, 2));
+        //     } catch (err) {
+        //         console.log(err);
+        //     }
+        // }
 
     }
 }

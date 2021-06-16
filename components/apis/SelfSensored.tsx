@@ -5,6 +5,7 @@ import {
     REACT_APP_SELF_SENSORED_USER_EMAIL,
     REACT_APP_SELF_SENSORED_USER_PASSWORD,
 } from "@env";
+import SelfSensoredDevice from "../self-sensored/ISelfSensoredDevice";
 
 const BASE_URL = "https://self-sensored.com/api/";
 
@@ -58,4 +59,8 @@ const requests = {
 export const SelfSensoredAPI = {
     getContextDetails: (): Promise<IContextDetailType[]> =>
         requests.get("/context/detail/self"),
+    storeDevice: (device: SelfSensoredDevice): Promise<SelfSensoredDevice> =>
+        requests.post("/device", device),
+    getDevice: (deviceId: string): Promise<SelfSensoredDevice> =>
+        requests.get(`/device/${deviceId}`),
 };

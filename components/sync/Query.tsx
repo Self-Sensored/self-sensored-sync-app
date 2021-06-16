@@ -1,8 +1,11 @@
 import AppleHealthKit, {
+    HealthInputOptions,
     HealthUnitOptions,
     HealthValue,
 } from "react-native-health";
+
 import IObvy from "../interfaces/Obvy";
+import Devices from "../self-sensored/Devices";
 
 export interface IQuery {
     success: boolean;
@@ -12,7 +15,9 @@ export interface IQuery {
 }
 
 export async function getData(
+    devices: Devices,
     datatype: string,
+    unit: string,
     startDate: Date,
     endDate: Date
 ): Promise<IObvy> {
@@ -20,13 +25,21 @@ export async function getData(
         switch (datatype) {
             case "BiologicalSex":
                 AppleHealthKit.getBiologicalSex(
-                    { unit: undefined } as HealthUnitOptions,
+                    { unit: unit } as HealthUnitOptions,
                     (err: Object, results: Object) => {
                         if (err) {
                             reject({
                                 success: false,
                             } as IQuery);
                         }
+
+                        // 1. Gather device info.
+                        // 2. Save device.
+                        // 3. Query the sample.
+                        // 4. Store the sample.
+
+                        console.log(results);
+                        // devices.storeDevice(device)
 
                         const obv = {
                             observer: "iPhone",
@@ -35,7 +48,7 @@ export async function getData(
                             type: "biological_sex",
                             start: startDate,
                             end: endDate,
-                            unit: undefined,
+                            unit: "",
                             value: Object(results)["value"],
                         } as IObvy;
 
@@ -52,17 +65,33 @@ export async function getData(
             case "WeightSamples":
                 const options = {
                     unit: "pound",
-                    startDate: startDate,
-                    endDate: endDate,
-                } as HealthUnitOptions;
+                    startDate: startDate.toISOString(),
+                    endDate: endDate.toISOString(),
+                } as HealthInputOptions;
 
                 AppleHealthKit.getWeightSamples(
                     options,
-                    (callbackError: string, results: HealthValue[]) => {
+                    async (callbackError: string, results: any[]) => {
                         if (callbackError) {
                             console.log(JSON.stringify(callbackError, null, 2));
                         }
-                        console.log(JSON.stringify(results, null, 2));
+                        // 1. Gather device info.
+                        // 2. Save device.
+                        // 3. Query the sample.
+                        // 4. Store the sample.
+
+                        for (let index = 0; index < results.length; index++) {
+                            const element = results[index];
+                            console.log(JSON.stringify(element, null, 2));
+                            try {
+                                await devices.storeDevice(
+                                    element["sourceId"],
+                                    element["sourceName"]
+                                );
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        }
                     }
                 );
                 break;
