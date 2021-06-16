@@ -1,4 +1,5 @@
 export default interface SelfSensoredDevice {
+    id?: number,
     native_id: string,
     platform: string,
     name: string,

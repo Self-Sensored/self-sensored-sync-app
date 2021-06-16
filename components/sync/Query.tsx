@@ -82,12 +82,13 @@ export async function getData(
 
                         for (let index = 0; index < results.length; index++) {
                             const element = results[index];
-                            console.log(JSON.stringify(element, null, 2));
+                            // console.log(JSON.stringify(element, null, 2));
                             try {
-                                await devices.storeDevice(
+                                let device = await devices.getDevice(
                                     element["sourceId"],
                                     element["sourceName"]
                                 );
+                                console.log(JSON.stringify(device, null, 2));
                             } catch (error) {
                                 console.log(error);
                             }
