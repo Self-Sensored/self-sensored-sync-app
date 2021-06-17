@@ -1,11 +1,12 @@
 import axios, { AxiosResponse } from "axios";
-import IContextDetailType from "../interfaces/IContextDetailType";
+import IContextDetailType from "../interfaces/ContextDetail";
 
 import {
     REACT_APP_SELF_SENSORED_USER_EMAIL,
     REACT_APP_SELF_SENSORED_USER_PASSWORD,
 } from "@env";
-import SelfSensoredDevice from "../self-sensored/ISelfSensoredDevice";
+import Device from "../interfaces/Device";
+import NativeToSelfMap from "../interfaces/NativeToSelfMap";
 
 const BASE_URL = "https://self-sensored.com/api/";
 
@@ -62,8 +63,10 @@ const requests = {
 export const SelfSensoredAPI = {
     getContextDetails: (): Promise<IContextDetailType[]> =>
         requests.get("/context/detail/self"),
-    storeDevice: (device: SelfSensoredDevice): Promise<SelfSensoredDevice> =>
+    getNativeToSelfMap: (platform: string): Promise<NativeToSelfMap[]> =>
+        requests.get(`/context/detail/${platform}`),
+    storeDevice: (device: Device): Promise<Device> =>
         requests.post("/device", device),
-    getDevice: (deviceId: string): Promise<SelfSensoredDevice> =>
+    getDevice: (deviceId: string): Promise<Device> =>
         requests.get(`/device/${deviceId}`),
 };

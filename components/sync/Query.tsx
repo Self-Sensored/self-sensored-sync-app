@@ -5,7 +5,9 @@ import AppleHealthKit, {
 } from "react-native-health";
 
 import IObvy from "../interfaces/Obvy";
-import Devices from "../self-sensored/Devices";
+import DevicesManager from "../self-sensored/DevicesManager";
+import { SelfSensoredAPI } from "../apis/SelfSensored";
+import ContextDetailsManager from "../self-sensored/ContextDetailsManager";
 
 export interface IQuery {
     success: boolean;
@@ -15,7 +17,8 @@ export interface IQuery {
 }
 
 export async function getData(
-    devices: Devices,
+    devices: DevicesManager,
+    contextDetailsManager: ContextDetailsManager,
     datatype: string,
     unit: string,
     startDate: Date,
@@ -35,8 +38,10 @@ export async function getData(
 
                         // 1. Gather device info.
                         // 2. Save device.
-                        // 3. Query the sample.
-                        // 4. Store the sample.
+                        // 3. Get ContextDetails.
+                        // 4.
+                        // 5. Query the sample.
+                        // 6. Store the sample.
 
                         console.log(results);
                         // devices.storeDevice(device)
@@ -75,22 +80,33 @@ export async function getData(
                         if (callbackError) {
                             console.log(JSON.stringify(callbackError, null, 2));
                         }
-                        // 1. Gather device info.
-                        // 2. Save device.
-                        // 3. Query the sample.
-                        // 4. Store the sample.
 
                         for (let index = 0; index < results.length; index++) {
                             const element = results[index];
-                            // console.log(JSON.stringify(element, null, 2));
+
+                            // 1. Gather device info.
+                            // 2. Save device.
+                            // 3. Get ContextDetails.
+                            // 4.
+                            // 5. Query the sample.
+                            // 6. Store the sample.
+
                             try {
                                 let device = await devices.getDevice(
                                     element["sourceId"],
                                     element["sourceName"]
                                 );
-                                console.log(JSON.stringify(device, null, 2));
                             } catch (error) {
                                 console.log(error);
+                            }
+
+                            try {
+                                let contextDetails =
+                                    await contextDetailsManager.getNativeMap(
+                                        "apple"
+                                    );
+                            } catch (err) {
+                                console.log(err);
                             }
                         }
                     }

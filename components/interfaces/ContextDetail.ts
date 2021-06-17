@@ -1,4 +1,4 @@
-export default interface IContextDetail {
+export default interface ContextDetail {
     id: number;
     action: string;
     observation_type: string;

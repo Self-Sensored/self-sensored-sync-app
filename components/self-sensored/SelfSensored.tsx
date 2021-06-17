@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Card } from "react-native-ui-lib";
 import { FlatList, StyleSheet } from "react-native";
 import { SelfSensoredAPI } from "../apis/SelfSensored";
-import IContextDetail from "../interfaces/IContextDetailType";
+import ContextDetail from "../interfaces/ContextDetail";
 import SyncAllItems from "../sync/SyncAllItems";
 
 export interface SelfSensoredProps {}
 
 const SelfSensored: React.FC<SelfSensoredProps> = () => {
-    const [contextDetails, setContextDetails] = useState<IContextDetail[]>();
+    const [contextDetails, setContextDetails] = useState<ContextDetail[]>();
     const getContextDetails = async () => {
         try {
             let details = await SelfSensoredAPI.getContextDetails();

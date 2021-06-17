@@ -10,8 +10,8 @@ import AppleHealthKit, {
 import SyncStatusText from "./SyncStatusText";
 import { SyncStatusTextProps } from "./SyncStatusText";
 import { getData, IQuery } from "./Query";
-import BuildObeservationContext from "../self-sensored/BuildObservationContext";
-import Devices from "../self-sensored/Devices";
+import ContextDetailsManager from "../self-sensored/ContextDetailsManager";
+import DevicesManager from "../self-sensored/DevicesManager";
 
 // Date Health app was released.
 const HEALTH_APP_RELEASE_DATE = new Date(2014, 6, 2);
@@ -19,7 +19,8 @@ const HEALTH_APP_RELEASE_DATE = new Date(2014, 6, 2);
 export interface SyncItemProps {
     datatype: string;
     unit: string;
-    devices: Devices;
+    devices: DevicesManager;
+    contextDetailsManager: ContextDetailsManager;
 }
 
 const SyncItem: React.FC<SyncItemProps> = (props: SyncItemProps) => {
@@ -30,6 +31,7 @@ const SyncItem: React.FC<SyncItemProps> = (props: SyncItemProps) => {
             try {
                 const result = await getData(
                     props.devices,
+                    props.contextDetailsManager,
                     props.datatype,
                     props.unit,
                     HEALTH_APP_RELEASE_DATE,
@@ -42,7 +44,7 @@ const SyncItem: React.FC<SyncItemProps> = (props: SyncItemProps) => {
     }, []);
 
     const createContext = async () => {
-        const obvy_context = new BuildObeservationContext(props.datatype);
+        const obvy_context = new ContextDetailsManager(props.datatype);
         try {
             await obvy_context.init();
             return;

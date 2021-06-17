@@ -1,4 +1,4 @@
-import ISelfSensoredDevice from "./ISelfSensoredDevice";
+import Device from "../interfaces/Device";
 import {
     getUniqueId,
     getDeviceName,
@@ -15,15 +15,15 @@ import {
     SelfSensoredAPI
 } from "../apis/SelfSensored";
 
-export default class Devices {
+export default class DevicesManager {
 
     devices: {
-        [key: string]: ISelfSensoredDevice
+        [key: string]: Device
     } = {};
 
     constructor() {}
 
-    getDevice = async (deviceName: string, deviceId: string): Promise<ISelfSensoredDevice | undefined> =>  {
+    getDevice = async (deviceName: string, deviceId: string): Promise<Device | undefined> =>  {
         
         // 1. Check if the device is cached locally, use it if so.
         // 2. Create the device object.
@@ -39,7 +39,7 @@ export default class Devices {
 
         // TODO: Below only adds device info for the connected device,
         //       not the actual observer of the sample.
-        // const device = < ISelfSensoredDevice > {
+        // const device = < Device > {
         //     native_id: await getUniqueId(),
         //     platform: await Platform.OS,
         //     name: deviceName ? deviceName : await getDeviceName(),
@@ -61,13 +61,12 @@ export default class Devices {
                 return device;
             }
         } catch (err) {
-            console.log('here3')
             console.log(err)
         }
         
         // 4. 
         try {
-            const device = < ISelfSensoredDevice > {
+            const device = < Device > {
                 native_id: deviceName,
                 platform: "",
                 name: deviceId,
@@ -77,15 +76,12 @@ export default class Devices {
                 mac_address: ""
             };
             this.devices[deviceId] = device;
-            console.log('here4')
             const savedDevice = await SelfSensoredAPI.storeDevice(device);
             if(savedDevice) {
-                console.log('here5')
-                // return savedDevice;
+                return savedDevice;
             } else {
                 throw "Unable to store device."
             }
-            return undefined;
         } catch (err) {
             console.log(err)
             return undefined;

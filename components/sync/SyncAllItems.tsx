@@ -1,13 +1,14 @@
 import React, { createContext, useState } from "react";
 import getSampleTypes from "../apple/AllHealthKitSampleTypes";
 import SyncItem, { SyncItemProps } from "./SyncItem";
-import Devices from "../self-sensored/Devices";
+import DevicesManager from "../self-sensored/DevicesManager";
+import ContextDetailsManager from "../self-sensored/ContextDetailsManager";
 
 export interface SyncAllItemsProps {}
 
 const SyncAllItems: React.FC<SyncAllItemsProps> = () => {
-    const devices = new Devices();
-
+    const deviceManager = new DevicesManager();
+    const contextDetailsManager = new ContextDetailsManager();
     const allSampleTypes = getSampleTypes();
     const [selectedDatatype, setSelectedDatatype] = useState(allSampleTypes[4]);
 
@@ -15,7 +16,8 @@ const SyncAllItems: React.FC<SyncAllItemsProps> = () => {
         <>
             <SyncItem
                 datatype={selectedDatatype}
-                devices={devices}
+                devices={deviceManager}
+                contextDetailsManager={contextDetailsManager}
                 unit="pound"
             ></SyncItem>
         </>

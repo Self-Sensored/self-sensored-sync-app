@@ -1,4 +1,4 @@
-export default interface SelfSensoredDevice {
+export default interface Device {
     id?: number,
     native_id: string,
     platform: string,
